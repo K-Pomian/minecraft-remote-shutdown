@@ -38,7 +38,7 @@ async fn main() {
     }
     tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
 
-    info!("Server stopper, shutting down system...");
+    info!("Server stopped, shutting down system...");
     match system_shutdown::shutdown() {
         Ok(_) => info!("Ok bye!"),
         Err(error) => error!("Failed to shut down: {}", error),
