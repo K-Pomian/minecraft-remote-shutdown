@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 system_shutdown = "4.0.1"
 ctrlc = "3.4.2"
+serde = "1.0.197"
 serde_json = "1.0.113"
 futures = "0.3.30"
 axum = { version = "0.7.4", features = ["macros"] }
@@ -18,6 +19,8 @@ tower = { version = "0.4.13", features = [
 tower-http = { version = "0.5.1", features = ["cors", "trace"] }
 reqwest = "0.11.24"
 tokio = { version = "1.35.1", features = ["full"] }
+anyhow = "1.0.80"
+async-channel = "2.2.0"
 
 [profile.dev]
 incremental = true
