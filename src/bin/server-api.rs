@@ -1,6 +1,5 @@
 use async_channel::bounded;
 use log::{error, info};
-use minecraft_remote_shutdown::user_api::entry::run;
 use std::net::SocketAddr;
 use std::sync::mpsc::channel;
 use tracing_subscriber::EnvFilter;
