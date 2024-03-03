@@ -2,6 +2,7 @@ use super::routes::routes;
 use async_channel::Receiver;
 use axum::{http::Method, Router};
 use futures::StreamExt;
+use log::{error, info};
 use std::{
     net::SocketAddr,
     pin::Pin,
@@ -33,8 +34,10 @@ pub fn get_timestamp_in_seconds() -> u64 {
 }
 
 pub async fn build_router(socket_addr: &SocketAddr, api_kill_switch: Receiver<()>) -> Router {
+    // Get the router
     let router = routes().await;
 
+    // Start the server
     let listener = tokio::net::TcpListener::bind(&socket_addr).await.unwrap();
     let pinned_api_kill_switch = Box::pin(api_kill_switch);
 
@@ -46,10 +49,11 @@ pub async fn build_router(socket_addr: &SocketAddr, api_kill_switch: Receiver<()
     )
     .with_graceful_shutdown(shutdown_signal(pinned_api_kill_switch));
 
+    // Run the task, await for the shutdown signal
     tokio::spawn(async move {
         match graceful_shutdown.await {
-            Ok(_) => println!("Server shutdown gracefully"),
-            Err(e) => println!("Server shutdown with error: {}", e),
+            Ok(_) => info!("Server shutdown gracefully"),
+            Err(e) => error!("Server shutdown with error: {}", e),
         }
     });
     return router;
@@ -58,10 +62,10 @@ pub async fn build_router(socket_addr: &SocketAddr, api_kill_switch: Receiver<()
 async fn shutdown_signal(mut receiver: Pin<Box<Receiver<()>>>) {
     match receiver.next().await {
         Some(_) => {
-            println!("Shutting down Axum server...");
+            info!("Shutting down Axum server...");
         }
         None => {
-            println!(
+            error!(
             "Error has occurred, maybe the channel is closed ? Shutting down Axum server anyway..."
             );
         }

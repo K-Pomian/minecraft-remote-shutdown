@@ -21,6 +21,8 @@ reqwest = "0.11.24"
 tokio = { version = "1.35.1", features = ["full"] }
 anyhow = "1.0.80"
 async-channel = "2.2.0"
+log = "0.4.20"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 
 [profile.dev]
 incremental = true
